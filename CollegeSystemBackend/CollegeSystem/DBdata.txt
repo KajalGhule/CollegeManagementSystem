@@ -13,3 +13,10 @@ dotnet ef migrations add InitialCreate
 
 Apply Migration (Create Database)
 dotnet ef database update
+
+
+to use JWT install
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.0.0
+
+add
+dotnet add package BCrypt.Net-Next --version 4.0.2
