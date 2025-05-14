@@ -1,0 +1,15 @@
+﻿To use SqlServer inside the project we need to add package 
+
+for SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+For Mysql
+dotnet add package Pomelo.EntityFrameworkCore.MySql
+
+>dotnet add package Microsoft.EntityFrameworkCore.Design
+
+Add Migration
+dotnet ef migrations add InitialCreate
+
+Apply Migration (Create Database)
+dotnet ef database update
