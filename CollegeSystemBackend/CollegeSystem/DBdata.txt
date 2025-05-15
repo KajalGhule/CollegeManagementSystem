@@ -20,3 +20,38 @@ dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 8.0.0
 
 add
 dotnet add package BCrypt.Net-Next --version 4.0.2
+
+
+
+
+If role == "Admin"
+    -> Only create User
+
+If role == "Student"
+    -> Create User
+    -> Add Student with UserId and DepartmentId
+
+If role == "Faculty" or "HOD"
+    -> Create User
+    -> Add Staff (as Faculty/HOD) with UserId and DepartmentId
+
+
+
+
+
+-- Step 1: Create HOD user
+INSERT INTO users (Username, Email, Password, Role)
+VALUES ('hod01', 'hod@college.com', 'hod123', 'HOD');
+
+-- Step 2: Create Department without HOD
+INSERT INTO departments (Name, CollegeId)
+VALUES ('Computer Science', 1);
+
+-- Step 3: Insert HOD into staffs
+INSERT INTO staffs (Name, Email, DepartmentId, UserId)
+VALUES ('Dr. HOD', 'hod@college.com', 1, 4);
+
+-- Step 4: Assign HOD to department
+UPDATE `collegedb`.`departments`
+SET `HODId` = 3
+WHERE `Id` = 2;

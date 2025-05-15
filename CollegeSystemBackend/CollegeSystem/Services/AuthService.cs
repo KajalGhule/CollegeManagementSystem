@@ -2,6 +2,7 @@
 using CollegeSystem.Entities;
 using CollegeSystem.JWT;
 using CollegeSystem.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollegeSystem.Services
 {
@@ -9,11 +10,15 @@ namespace CollegeSystem.Services
     {
         private readonly IAuthRepository _authRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IStaffRepository _staffRepository;
 
-        public AuthService(IAuthRepository authRepository, IJwtTokenGenerator jwtTokenGenerator)
+        public AuthService(IAuthRepository authRepository, IJwtTokenGenerator jwtTokenGenerator, IStaffRepository staffRepository, IStudentRepository studentRepository)
         {
             _authRepository = authRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
+            _staffRepository = staffRepository;
+            _studentRepository = studentRepository;
         }
 
         public async Task<string> Register(RegisterDto dto)
@@ -34,6 +39,28 @@ namespace CollegeSystem.Services
 
             await _authRepository.AddUserAsync(user);
 
+            if (dto.Role == "Student")
+            {
+                var student = new Student
+                {
+                    Name = dto.Name,
+                    Email = dto.Email,
+                    DepartmentId = dto.DepartmentId.Value,
+                    UserId = user.Id
+                };
+                await _studentRepository.AddStudentAsync(student);
+            }
+            else if (dto.Role == "Faculty" || dto.Role == "HOD")
+            {
+                var staff = new Staff
+                {
+                    Name = dto.Name,
+                    Email = dto.Email,
+                    DepartmentId = dto.DepartmentId.Value,
+                    UserId = user.Id
+                };
+                await _staffRepository.AddStaffAsync(staff);
+            }
             return "Registration successful";
         }
 
